@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hospital_tag_tree" model="ir.ui.view">
+        <field name="name">hospital.tag.tree</field>
+        <field name="model">hospital.tag</field>
+        <field name="arch" type="xml">
+            <list string="Tags" editable="bottom">
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_hospital_tag" model="ir.actions.act_window">
+        <field name="name">Tags</field>
+        <field name="res_model">hospital.tag</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new medical tag.
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_hospital_tag"
+              name="Tags"
+              parent="menu_hospital_config"
+              action="action_hospital_tag"
+              sequence="10"/>
+</odoo>

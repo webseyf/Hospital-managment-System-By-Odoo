@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- THE TOP MENU -->
+    <menuitem 
+        id="menu_hospital_root"
+        name="Hospital"
+        sequence="10"/>
+
+    <!-- PARENT MENUS (Categories) -->
+    <menuitem 
+        id="menu_hospital_operations"
+        name="Operations"
+        parent="menu_hospital_root"
+        sequence="10"/>
+
+    <menuitem 
+        id="menu_hospital_staff"
+        name="Medical Staff"
+        parent="menu_hospital_root"
+        sequence="20"/>
+
+    <menuitem 
+        id="menu_hospital_pharmacy"
+        name="Pharmacy"
+        parent="menu_hospital_root"
+        sequence="40"/>
+
+    <menuitem 
+        id="menu_hospital_config"
+        name="Configuration"
+        parent="menu_hospital_root"
+        sequence="100"/>
+
+    <!-- ACTION MENUS (Clickable Links) -->
+    <menuitem 
+        id="menu_hospital_patient"
+        name="Patients"
+        action="action_hospital_patient"
+        parent="menu_hospital_operations"
+        sequence="10"/>
+
+    <menuitem 
+        id="menu_hospital_appointment"
+        name="Appointments"
+        action="action_hospital_appointment"
+        parent="menu_hospital_operations"
+        sequence="20"/>
+
+    <menuitem 
+        id="menu_hospital_doctor"
+        name="Doctors"
+        action="action_hospital_doctor"
+        parent="menu_hospital_staff"
+        sequence="30"/>
+
+    <menuitem 
+        id="menu_hospital_prescription"
+        name="Prescriptions"
+        action="action_hospital_prescription"
+        parent="menu_hospital_pharmacy"
+        sequence="10"/>
+
+</odoo>

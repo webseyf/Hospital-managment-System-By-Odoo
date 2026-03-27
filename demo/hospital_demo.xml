@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+       
+        <!-- 1. Departments -->
+        <record id="dept_cardio" model="hospital.department">
+            <field name="name">Cardiology</field>
+        </record>
+        <record id="dept_ortho" model="hospital.department">
+            <field name="name">Orthopedics</field>
+        </record>
+
+        <!-- 2. Doctors -->
+        <record id="doctor_cardio" model="hospital.doctor">
+            <field name="name">Dr. Gregory House</field>
+            <field name="specialization">Cardiology</field>
+            <field name="department_id" ref="dept_cardio"/>
+            <field name="consultation_fee">1200.0</field>
+        </record>
+        <record id="doctor_ortho" model="hospital.doctor">
+            <field name="name">Dr. James Wilson</field>
+            <field name="specialization">Orthopedics</field>
+            <field name="department_id" ref="dept_ortho"/>
+            <field name="consultation_fee">950.0</field>
+        </record>
+
+        <!-- 3. Wards & Beds -->
+        <record id="ward_icu" model="hospital.ward">
+            <field name="name">Intensive Care Unit (ICU)</field>
+            <field name="building">A-Block</field>
+            <field name="floor">3</field>
+        </record>
+        <record id="bed_icu_1" model="hospital.bed">
+            <field name="name">ICU-B1</field>
+            <field name="ward_id" ref="ward_icu"/>
+        </record>
+
+        <!-- 4. Patients -->
+        <record id="patient_john" model="hospital.patient">
+            <field name="name">John Marston</field>
+            <field name="date_of_birth" eval="datetime.now() - relativedelta(years=38)"/>
+            <field name="gender">male</field>
+            <field name="blood_group">O+</field>
+            <field name="medical_alert">Chronic Gastritis, Penicillin Allergy</field>
+        </record>
+        <record id="patient_ellie" model="hospital.patient">
+            <field name="name">Ellie Williams</field>
+            <field name="date_of_birth" eval="datetime.now() - relativedelta(years=14)"/>
+            <field name="gender">female</field>
+            <field name="medical_alert">Asthma</field>
+        </record>
+
+        <!-- 5. Initial Appointments -->
+        <record id="appt_john_1" model="hospital.appointment">
+            <field name="patient_id" ref="patient_john"/>
+            <field name="doctor_id" ref="doctor_cardio"/>
+            <field name="appointment_date" eval="datetime.now()"/>
+            <field name="appointment_type">ipd</field>
+            <field name="is_urgent">True</field>
+            <field name="ward_id" ref="ward_icu"/>
+            <field name="bed_id" ref="bed_icu_1"/>
+        </record>
+
+    </data>
+</odoo>

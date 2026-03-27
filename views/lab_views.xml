@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lab Test View -->
+    <record id="view_hospital_lab_test_list" model="ir.ui.view">
+        <field name="name">hospital.lab.test.list</field>
+        <field name="model">hospital.lab.test</field>
+        <field name="arch" type="xml">
+            <list string="Lab Tests" editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="normal_range"/>
+                <field name="unit"/>
+                <field name="price"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Lab Request View -->
+    <record id="view_hospital_lab_request_list" model="ir.ui.view">
+        <field name="name">hospital.lab.request.list</field>
+        <field name="model">hospital.lab.request</field>
+        <field name="arch" type="xml">
+            <list string="Lab Requests">
+                <field name="name"/>
+                <field name="date_requested"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hospital_lab_request_form" model="ir.ui.view">
+        <field name="name">hospital.lab.request.form</field>
+        <field name="model">hospital.lab.request</field>
+        <field name="arch" type="xml">
+            <form string="Lab Request">
+                <header>
+                    <button name="action_request" string="Request" type="object" invisible="state != 'draft'"/>
+                    <button name="action_collect" string="Collect Sample" type="object" invisible="state != 'requested'"/>
+                    <button name="action_test" string="Start Testing" type="object" invisible="state != 'collecting'"/>
+                    <button name="action_complete" string="Complete" type="object" invisible="state != 'testing'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,requested,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="doctor_id"/>
+                        </group>
+                        <group>
+                            <field name="date_requested"/>
+                            <field name="appointment_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Tests &amp; Results" name="tests">
+                            <field name="test_line_ids">
+                                <list editable="bottom">
+                                    <field name="test_id"/>
+                                    <field name="result_value"/>
+                                    <field name="normal_range"/>
+                                    <field name="unit"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Lab Action & Menu -->
+    <record id="action_hospital_lab_request" model="ir.actions.act_window">
+        <field name="name">Laboratory Requests</field>
+        <field name="res_model">hospital.lab.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_hospital_lab_test" model="ir.actions.act_window">
+        <field name="name">Lab Test Configurations</field>
+        <field name="res_model">hospital.lab.test</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_hospital_laboratory"
+              name="Laboratory"
+              parent="menu_hospital_root"
+              sequence="50"/>
+
+    <menuitem id="menu_hospital_lab_request"
+              name="Requests"
+              parent="menu_hospital_laboratory"
+              action="action_hospital_lab_request"
+              sequence="10"/>
+
+    <menuitem id="menu_hospital_lab_test"
+              name="Test Configuration"
+              parent="menu_hospital_config"
+              action="action_hospital_lab_test"
+              sequence="20"/>
+</odoo>

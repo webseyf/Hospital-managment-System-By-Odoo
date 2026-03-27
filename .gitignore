@@ -1,0 +1,16 @@
+# Odoo Gitignore
+*.py[cod]
+__pycache__/
+*.swp
+*~
+.vscode/
+.idea/
+.project
+.pydevproject
+.settings/
+.env
+venv/
+*.log
+*.pot
+/static/description/*.png
+!/static/description/icon.png

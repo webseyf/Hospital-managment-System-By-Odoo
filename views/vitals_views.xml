@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hospital_vitals_list" model="ir.ui.view">
+        <field name="name">hospital.patient.vitals.list</field>
+        <field name="model">hospital.patient.vitals</field>
+        <field name="arch" type="xml">
+            <list string="Nursing Vitals" duplicate="0">
+                <field name="vitals_date"/>
+                <field name="patient_id"/>
+                <field name="temperature" string="Temp (°C)" decoration-danger="temperature &gt; 38" decoration-warning="temperature &gt; 37.5"/>
+                <field name="pulse" string="Pulse" decoration-danger="pulse &gt; 110 or pulse &lt; 50"/>
+                <field name="sys_bp" string="Sys BP" decoration-danger="sys_bp &gt; 140 or sys_bp &lt; 90"/>
+                <field name="dia_bp" string="Dia BP"/>
+                <field name="spo2" string="SpO2" decoration-danger="spo2 &lt; 92" decoration-warning="spo2 &lt; 95"/>
+                <field name="bmi" string="BMI"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hospital_vitals_form" model="ir.ui.view">
+        <field name="name">hospital.patient.vitals.form</field>
+        <field name="model">hospital.patient.vitals</field>
+        <field name="arch" type="xml">
+            <form string="Nursing Vitals">
+                <sheet>
+                    <group>
+                        <group string="Patient Info">
+                            <field name="patient_id" readonly="1"/>
+                            <field name="appointment_id" readonly="1"/>
+                            <field name="vitals_date"/>
+                        </group>
+                        <group string="Physical Vitals">
+                            <field name="weight"/>
+                            <field name="height"/>
+                            <field name="bmi" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Clinical Vitals">
+                            <label for="sys_bp" string="Blood Pressure (Sys/Dia)"/>
+                            <div class="o_row">
+                                <field name="sys_bp" placeholder="Sys"/>
+                                <span>/</span>
+                                <field name="dia_bp" placeholder="Dia"/>
+                                <span>mmHg</span>
+                            </div>
+                            <field name="temperature"/>
+                            <field name="pulse"/>
+                            <field name="spo2"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
