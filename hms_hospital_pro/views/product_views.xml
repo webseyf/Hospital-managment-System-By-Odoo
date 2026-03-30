@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Product Form to add hospital_ok -->
+    <record id="product_template_form_view_hms" model="ir.ui.view">
+        <field name="name">product.template.form.hms</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='options']" position="inside">
+                <span class="d-inline-block">
+                    <field name="hospital_ok"/>
+                    <label for="hospital_ok"/>
+                </span>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Pharmacy Action -->
+    <record id="action_hospital_pharmacy" model="ir.actions.act_window">
+        <field name="name">Pharmacy / Medicines</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('hospital_ok', '=', True)]</field>
+        <field name="context">{'default_hospital_ok': True, 'default_type': 'product'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage your hospital's medicine stock.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_hospital_pharmacy"
+              name="Pharmacy"
+              parent="menu_hospital_root"
+              action="action_hospital_pharmacy"
+              sequence="40"/>
+</odoo>

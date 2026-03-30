@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hospital_appointment_tree" model="ir.ui.view">
+        <field name="name">hospital.appointment.tree</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <list string="Appointments" decoration-info="status == 'draft'" decoration-success="status == 'done'" decoration-warning="status == 'cancelled'">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="appointment_date"/>
+                <field name="status" widget="badge" decoration-info="status == 'draft'" decoration-success="status == 'done'" decoration-warning="status == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hospital_appointment_form" model="ir.ui.view">
+        <field name="name">hospital.appointment.form</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <form string="Appointment">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" invisible="status != 'draft'" class="oe_highlight"/>
+                    <button name="action_checkin" string="Check-in" type="object" invisible="status != 'confirmed'" class="oe_highlight"/>
+                    <button name="action_discharge" string="Discharge" type="object" invisible="status != 'checked_in' or appointment_type != 'ipd'" class="oe_highlight"/>
+                    <button name="action_done" string="Done" type="object" invisible="status != 'checked_in' or appointment_type == 'ipd'" class="oe_highlight"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="status not in ('draft', 'confirmed')"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,confirmed,checked_in,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_visit" type="object" class="oe_stat_button" icon="fa-stethoscope">
+                            <field name="visit_count" string="Consultation" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_vitals" type="object" class="oe_stat_button" icon="fa-heartbeat">
+                            <field name="vitals_count" string="Vitals" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="invoice_id == False">
+                             <div class="o_stat_info">
+                                <span class="o_stat_text">Invoice</span>
+                            </div>
+                        </button>
+                        <button name="action_view_lab" type="object" class="oe_stat_button" icon="fa-flask">
+                            <field name="lab_count" string="Lab Tests" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_radiology" type="object" class="oe_stat_button" icon="fa-film">
+                            <field name="radiology_count" string="Imaging" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="doctor_id"/>
+                            <field name="appointment_type" widget="radio" options="{'horizontal': True}"/>
+                            <field name="is_urgent" widget="boolean_toggle"/>
+                            <field name="ward_id" invisible="appointment_type != 'ipd'" required="appointment_type == 'ipd'"/>
+                            <field name="bed_id" invisible="appointment_type != 'ipd'" required="appointment_type == 'ipd'"/>
+                            <field name="checkin_date" invisible="not checkin_date"/>
+                            <field name="checkout_date" invisible="not checkout_date"/>
+                            <field name="discharge_summary_id" invisible="not discharge_summary_id"/>
+                        </group>
+                        <group name="scheduling_info" string="Scheduling">
+                            <field name="appointment_date"/>
+                            <field name="duration"/>
+                            <field name="appointment_end"/>
+                            <field name="checkin_time"/>
+                            <field name="wait_duration" widget="float_time"/>
+                            <field name="visit_type" widget="radio" options="{'horizontal': true}"/>
+                        </group>
+                        <group name="billing_info" string="Billing">
+                            <field name="consultation_fee"/>
+                            <field name="payment_status" widget="radio" options="{'horizontal': true}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="IPD Details" name="ipd_details" invisible="visit_type != 'ipd'">
+                            <group>
+                                <group>
+                                    <field name="ward_id" options="{'no_create': True}"/>
+                                    <field name="bed_id" options="{'no_create': True}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hospital_appointment_search" model="ir.ui.view">
+        <field name="name">hospital.appointment.search</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <search string="Appointments">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hospital_appointment" model="ir.actions.act_window">
+        <field name="name">Appointments</field>
+        <field name="res_model">hospital.appointment</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hospital_appointment_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new appointment
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Appointment Graph View -->
+    <record id="view_hospital_appointment_graph" model="ir.ui.view">
+        <field name="name">hospital.appointment.graph</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <graph string="Revenue &amp; Duration" type="bar" sample="1">
+                <field name="doctor_id"/>
+                <field name="consultation_fee" type="measure" string="Total Revenue"/>
+                <field name="wait_duration" type="measure" string="Avg Wait (Mins)"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Bed Occupancy Pivot View -->
+    <record id="view_hospital_appointment_pivot" model="ir.ui.view">
+        <field name="name">hospital.appointment.pivot</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <pivot string="Hospital Analytics" sample="1">
+                <field name="appointment_type" type="row"/>
+                <field name="status" type="col"/>
+                <field name="consultation_fee" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_hospital_appointment_volume_graph" model="ir.ui.view">
+        <field name="name">hospital.appointment.volume.graph</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <graph string="Patient Volume" type="line" sample="1">
+                <field name="appointment_date" interval="day"/>
+                <field name="patient_id" type="measure" string="Patient Count"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Appointment Pivot View -->
+    <record id="view_hospital_appointment_pivot" model="ir.ui.view">
+        <field name="name">hospital.appointment.pivot</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <pivot string="Appointments Analysis" sample="1">
+                <field name="appointment_date" type="row" interval="month"/>
+                <field name="doctor_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Bed Occupancy Kanban (Dash-style) -->
+    <record id="view_hospital_bed_dashboard_kanban" model="ir.ui.view">
+        <field name="name">hospital.bed.dashboard.kanban</field>
+        <field name="model">hospital.bed</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" create="0">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="ward_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <span class="float-end badge rounded-pill" 
+                                      t-att-class="record.state.raw_value == 'available' ? 'text-bg-success' : 'text-bg-danger'">
+                                    <field name="state"/>
+                                </span>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <field name="ward_id"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Dashboard Action -->
+    <record id="action_hospital_dashboard_appointments" model="ir.actions.act_window">
+        <field name="name">Clinical Analytics</field>
+        <field name="res_model">hospital.appointment</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                View your hospital performance at a glance.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_hospital_dashboard_beds" model="ir.actions.act_window">
+        <field name="name">Bed Occupancy Status</field>
+        <field name="res_model">hospital.bed</field>
+        <field name="view_mode">kanban</field>
+    </record>
+
+    <!-- Menu items -->
+    <menuitem id="menu_hospital_dashboard_root"
+              name="Dashboards"
+              parent="menu_hospital_root"
+              sequence="5"/>
+
+    <menuitem id="menu_hospital_dashboard_appointments"
+              name="Clinical Analytics"
+              parent="menu_hospital_dashboard_root"
+              action="action_hospital_dashboard_appointments"
+              sequence="10"/>
+
+    <menuitem id="menu_hospital_dashboard_beds"
+              name="Bed Monitoring"
+              parent="menu_hospital_dashboard_root"
+              action="action_hospital_dashboard_beds"
+              sequence="20"/>
+
+</odoo>

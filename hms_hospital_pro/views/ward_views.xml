@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ward Views -->
+    <record id="view_hospital_ward_list" model="ir.ui.view">
+        <field name="name">hospital.ward.list</field>
+        <field name="model">hospital.ward</field>
+        <field name="arch" type="xml">
+            <list string="Wards">
+                <field name="name"/>
+                <field name="building"/>
+                <field name="floor"/>
+                <field name="total_beds"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hospital_ward_form" model="ir.ui.view">
+        <field name="name">hospital.ward.form</field>
+        <field name="model">hospital.ward</field>
+        <field name="arch" type="xml">
+            <form string="Ward">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Ward Name (e.g. ICU, General)"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="building"/>
+                            <field name="floor"/>
+                        </group>
+                        <group>
+                            <field name="total_beds"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Beds" name="beds">
+                            <field name="bed_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="state" widget="badge" decoration-success="state == 'available'" decoration-danger="state == 'occupied'"/>
+                                    <field name="patient_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Bed Action & Menu -->
+    <record id="action_hospital_ward" model="ir.actions.act_window">
+        <field name="name">Wards &amp; Beds</field>
+        <field name="res_model">hospital.ward</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_hospital_ward"
+              name="Wards &amp; Beds"
+              parent="menu_hospital_config"
+              action="action_hospital_ward"
+              sequence="10"/>
+</odoo>

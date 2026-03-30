@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+       
+        <!-- DOCTOR: Can only see their OWN patients/appointments -->
+        <record id="hospital_patient_rule_doctor" model="ir.rule">
+            <field name="name">Doctor: Own Patients Only</field>
+            <field name="model_id" ref="model_hospital_patient"/>
+            <field name="groups" eval="[(4, ref('hms_hospital_pro.group_hospital_doctor'))]"/>
+            <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <record id="hospital_appointment_rule_doctor" model="ir.rule">
+            <field name="name">Doctor: Own Appointments Only</field>
+            <field name="model_id" ref="model_hospital_appointment"/>
+            <field name="groups" eval="[(4, ref('hms_hospital_pro.group_hospital_doctor'))]"/>
+            <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <!-- NURSE & RECEPTIONIST: Global view for operations -->
+        <record id="hospital_patient_rule_staff" model="ir.rule">
+            <field name="name">Staff: Global Patient View</field>
+            <field name="model_id" ref="model_hospital_patient"/>
+            <field name="groups" eval="[(4, ref('hms_hospital_pro.group_hospital_nurse')), (4, ref('hms_hospital_pro.group_hospital_receptionist'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="hospital_appointment_rule_staff" model="ir.rule">
+            <field name="name">Staff: Global Appointment View</field>
+            <field name="model_id" ref="model_hospital_appointment"/>
+            <field name="groups" eval="[(4, ref('hms_hospital_pro.group_hospital_nurse')), (4, ref('hms_hospital_pro.group_hospital_receptionist'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <!-- MANAGER: Full Access -->
+        <record id="hospital_patient_rule_manager" model="ir.rule">
+            <field name="name">Manager: All Patients</field>
+            <field name="model_id" ref="model_hospital_patient"/>
+            <field name="groups" eval="[(4, ref('hms_hospital_pro.group_hospital_manager'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+    </data>
+</odoo>

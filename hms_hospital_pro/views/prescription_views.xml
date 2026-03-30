@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hospital_prescription_tree" model="ir.ui.view">
+        <field name="name">hospital.prescription.tree</field>
+        <field name="model">hospital.prescription</field>
+        <field name="arch" type="xml">
+            <list string="Prescriptions">
+                <field name="visit_id"/>
+                <field name="medicine_id"/>
+                <field name="lot_id" groups="stock.group_production_lot"/>
+                <field name="qty"/>
+                <field name="dosage"/>
+                <field name="duration"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_hospital_prescription" model="ir.actions.act_window">
+        <field name="name">Prescriptions</field>
+        <field name="res_model">hospital.prescription</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage pharmacy prescriptions.
+            </p>
+        </field>
+    </record>
+</odoo>

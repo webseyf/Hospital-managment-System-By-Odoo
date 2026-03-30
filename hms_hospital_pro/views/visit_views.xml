@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hospital_visit_list" model="ir.ui.view">
+        <field name="name">hospital.visit.list</field>
+        <field name="model">hospital.visit</field>
+        <field name="arch" type="xml">
+            <list string="Consultations">
+                <field name="name"/>
+                <field name="visit_date"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="diagnosis"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hospital_visit_form" model="ir.ui.view">
+        <field name="name">hospital.visit.form</field>
+        <field name="model">hospital.visit</field>
+        <field name="arch" type="xml">
+            <form string="Consultation">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="visit_info">
+                            <field name="appointment_id" readonly="1"/>
+                            <field name="patient_id"/>
+                            <field name="doctor_id"/>
+                            <field name="visit_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Clinical Notes" name="clinical_notes">
+                            <group>
+                                <field name="symptoms" placeholder="Describe symptoms..."/>
+                                <field name="diagnosis" placeholder="Final diagnosis..."/>
+                                <field name="notes" placeholder="Additional internal notes..."/>
+                            </group>
+                        </page>
+                        <page string="Prescriptions" name="prescriptions">
+                            <field name="prescription_ids">
+                                <list editable="bottom">
+                                    <field name="medicine_id"/>
+                                    <field name="lot_id" groups="stock.group_production_lot"/>
+                                    <field name="qty"/>
+                                    <field name="dosage"/>
+                                    <field name="duration"/>
+                                    <field name="instruction"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Vitals" name="vitals">
+                            <field name="vitals_ids" context="{'default_patient_id': patient_id, 'default_appointment_id': appointment_id}"/>
+                        </page>
+                        <page string="Lab Requests" name="lab_requests">
+                            <field name="lab_request_ids" context="{'default_patient_id': patient_id, 'default_doctor_id': doctor_id, 'default_appointment_id': appointment_id}"/>
+                        </page>
+                        <page string="Radiology" name="radiology_requests">
+                            <field name="radiology_request_ids" context="{'default_patient_id': patient_id, 'default_doctor_id': doctor_id, 'default_appointment_id': appointment_id}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hospital_visit" model="ir.actions.act_window">
+        <field name="name">Consultations</field>
+        <field name="res_model">hospital.visit</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Record a new patient consultation.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_hospital_visit"
+              name="Consultations"
+              parent="menu_hospital_root"
+              action="action_hospital_visit"
+              sequence="30"/>
+</odoo>

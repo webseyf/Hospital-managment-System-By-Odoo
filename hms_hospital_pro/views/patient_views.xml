@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hospital_patient_tree" model="ir.ui.view">
+        <field name="name">hospital.patient.tree</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <list string="Patients">
+                <field name="uhid"/>
+                <field name="name"/>
+                <field name="date_of_birth"/>
+                <field name="gender"/>
+                <field name="age"/>
+                <field name="phone"/>
+                <field name="doctor_id" widget="many2one_avatar"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hospital_patient_form" model="ir.ui.view">
+        <field name="name">hospital.patient.form</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <form string="Patient Registration">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_appointments" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <field name="appointment_count" string="Appointments" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="uhid"/>
+                        </h1>
+                        <h2>
+                            <field name="name" placeholder="Patient Name"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group name="patient_details" string="Demographics">
+                            <field name="gender" widget="radio" options="{'horizontal': true}"/>
+                            <field name="date_of_birth"/>
+                            <field name="age" readonly="1"/>
+                            <field name="is_minor" invisible="1"/>
+                            <field name="medical_alert" decoration-danger="1" invisible="not medical_alert"/>
+                            <field name="blood_group"/>
+                            <field name="marital_status"/>
+                        </group>
+                        <group name="contact_history" string="Contact &amp; Assignment">
+                            <field name="phone"/>
+                            <field name="email" widget="email"/>
+                            <field name="address"/>
+                            <field name="emergency_contact_name"/>
+                            <field name="emergency_contact_phone"/>
+                            <field name="doctor_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Electronic Medical Record (EMR)" name="emr_data">
+                            <group>
+                                <group string="Allergies">
+                                    <field name="allergies" nolabel="1" placeholder="Enter known allergies..."/>
+                                </group>
+                                <group string="Medical History">
+                                    <field name="medical_history" nolabel="1" placeholder="Enter past medical conditions..."/>
+                                </group>
+                            </group>
+                            <separator string="Clinical Timeline"/>
+                            <field name="medical_timeline" readonly="1" widget="html"/>
+                        </page>
+                        <page string="Appointments History" name="appointments">
+                            <field name="appointment_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="doctor_id"/>
+                                    <field name="appointment_date"/>
+                                    <field name="status" widget="badge" decoration-info="status == 'draft'" decoration-success="status == 'done'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hospital_patient_search" model="ir.ui.view">
+        <field name="name">hospital.patient.search</field>
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <search string="Patients">
+                <field name="name" filter_domain="['|', ('name', 'ilike', self), ('uhid', 'ilike', self)]"/>
+                <field name="uhid"/>
+                <field name="phone"/>
+                <filter string="Minor Patients" name="minors" domain="[('is_minor', '=', True)]"/>
+                <separator/>
+                <filter string="Male" name="male" domain="[('gender', '=', 'male')]"/>
+                <filter string="Female" name="female" domain="[('gender', '=', 'female')]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group name="group_by">
+                    <filter string="Gender" name="group_by_gender" context="{'group_by': 'gender'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hospital_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hospital_patient_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register a new patient into the HMS.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_hospital_patient"
+              name="Patients"
+              parent="menu_hospital_root"
+              action="action_hospital_patient"
+              sequence="10"/>
+</odoo>

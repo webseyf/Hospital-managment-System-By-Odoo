@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hospital_department_list" model="ir.ui.view">
+        <field name="name">hospital.department.list</field>
+        <field name="model">hospital.department</field>
+        <field name="arch" type="xml">
+            <list string="Departments">
+                <field name="name"/>
+                <field name="department_head_id"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hospital_department_form" model="ir.ui.view">
+        <field name="name">hospital.department.form</field>
+        <field name="model">hospital.department</field>
+        <field name="arch" type="xml">
+            <form string="Department">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Department Name (e.g. Cardiology)"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="department_head_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Doctors" name="doctors">
+                            <field name="doctor_ids" readonly="1"/>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hospital_department" model="ir.actions.act_window">
+        <field name="name">Departments</field>
+        <field name="res_model">hospital.department</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage hospital departments.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_hospital_department"
+              name="Departments"
+              parent="menu_hospital_root"
+              action="action_hospital_department"
+              sequence="5"/>
+</odoo>

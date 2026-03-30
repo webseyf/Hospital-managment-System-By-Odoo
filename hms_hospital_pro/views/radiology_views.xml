@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Radiology Request View -->
+    <record id="view_hospital_radiology_request_list" model="ir.ui.view">
+        <field name="name">hospital.radiology.request.list</field>
+        <field name="model">hospital.radiology.request</field>
+        <field name="arch" type="xml">
+            <list string="Radiology Requests">
+                <field name="name"/>
+                <field name="date_requested"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="test_id"/>
+                <field name="priority" widget="priority"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hospital_radiology_request_form" model="ir.ui.view">
+        <field name="name">hospital.radiology.request.form</field>
+        <field name="model">hospital.radiology.request</field>
+        <field name="arch" type="xml">
+            <form string="Radiology Request">
+                <header>
+                    <button name="action_request" string="Request" type="object" invisible="state != 'draft'"/>
+                    <button name="action_imaging" string="Start Imaging" type="object" invisible="state != 'requested'"/>
+                    <button name="action_report" string="Generate Report" type="object" invisible="state != 'imaging'"/>
+                    <button name="action_complete" string="Complete" type="object" invisible="state != 'reporting'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,requested,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="doctor_id"/>
+                            <field name="test_id"/>
+                        </group>
+                        <group>
+                            <field name="date_requested"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="appointment_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Clinical Notes" name="notes">
+                            <field name="clinical_history" placeholder="Enter patient clinical history..."/>
+                        </page>
+                        <page string="Radiology Report" name="report">
+                            <field name="radiology_report" placeholder="Radiologist findings..."/>
+                        </page>
+                        <page string="Scans / Images" name="scans">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Radiology Action & Menu -->
+    <record id="action_hospital_radiology_request" model="ir.actions.act_window">
+        <field name="name">Radiology Requests</field>
+        <field name="res_model">hospital.radiology.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_hospital_radiology"
+              name="Radiology"
+              parent="menu_hospital_root"
+              action="action_hospital_radiology_request"
+              sequence="60"/>
+</odoo>
